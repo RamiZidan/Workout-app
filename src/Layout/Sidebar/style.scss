@@ -1,0 +1,24 @@
+.side-bar-container{
+    .ant-menu{
+        margin-top: 15%;
+        font-size: medium;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        gap: 10%;
+        .svg{
+            font-size: 150%;
+        }
+    }
+    .demo-logo-vertical{
+        display: flex;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5%;
+        color: white;
+        font-weight: bolder;
+        font-size: x-large;
+    }
+
+}

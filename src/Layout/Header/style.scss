@@ -1,0 +1,25 @@
+.header-componenet{
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    flex-wrap: nowrap;
+    .anticon{
+        font-size: 150%;
+        cursor: pointer;
+    }
+    .anticon:hover{
+        color:'#1677FF'
+    }
+    .header-title{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: larger;
+        color:#555;
+        font-weight: bold;
+        word-wrap: break-word
+
+    }
+}
+
+    

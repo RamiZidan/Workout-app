@@ -1,0 +1,38 @@
+.register-page{
+    background-color:#001529;
+    font-weight: 600;
+    background: linear-gradient(rgba(255,255,255,0.0),rgba(255,255,255,0.0)), url("/src/assets/register-page.jpeg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    max-height: 100vh;
+    overflow: hidden;
+    
+}
+
+.register-card{
+    margin: 0px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // height: auto;
+    width: 400px;
+    z-index: 100;
+    box-shadow: 3px black ;
+}
+.register-title{
+    align-self: flex-start;
+    justify-self: flex-start;
+}
+
+.hover-text-navigator {
+    color: #1677FF;
+}
+
+.hover-text-navigator:hover {
+    color:black;
+    cursor: pointer;;
+}
