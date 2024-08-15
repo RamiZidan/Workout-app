@@ -12,7 +12,8 @@ const Header = () => {
     const navigate=useNavigate()
     const permission: Permissions | null = useSelector(selectCurrentPermission)
     const username = useSelector(selectCurrentUserName)
-    const title: string = permission === 'admin' ? 'Admin Panel' : permission === "governmentOfficer" ? `${'government dashboard'}` : `${username} user`
+    const title: string = permission == 1  ? 'Admin Panel' : ``;
+    
     const {
         token: { colorBgContainer },
     } = theme.useToken();

@@ -25,7 +25,7 @@ const Sidebar = () => {
             }}
             className='side-bar-container'
         >
-            <div className="demo-logo-vertical" >Digital Signature</div>
+            <div className="demo-logo-vertical" >Jasur </div>
             <Menu
                 // selectedKeys={}
                 theme="dark"

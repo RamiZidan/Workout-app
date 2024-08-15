@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 const Footer = () => {
   return (
     <Layout.Footer style={{ textAlign: 'center' }}>
-          Projcet2 ©{new Date().getFullYear()} Digital Signature App
+          Projcet 1 ©{new Date().getFullYear()} Jasur App
     </Layout.Footer>
   )
 }
