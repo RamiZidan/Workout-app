@@ -11,26 +11,54 @@ interface SideBarPage {
 export const adminPages: SideBarPage[] = [
     {
         key: '1',
-        icon: React.createElement(UserOutlined),
-        label: `Manage Users`,
-        url: '/manage-users'
+        icon: React.createElement(PicCenterOutlined),
+        label: `Home`,
+        url: '/'
     },
+    {
+        key: '2',
+        icon: React.createElement(UserOutlined),
+        label: `Muscles`,
+        url: '/dashboard/muscles'
+    },
+    {
+        key: '3',
+        icon: React.createElement(UserOutlined),
+        label: `Exercises`,
+        url: '/dashboard/exercises'
+    },
+    {
+        key: '4',
+        icon: React.createElement(UserOutlined),
+        label: `Courses`,
+        url: '/dashboard/courses'
+    },
+    // {
+    //     key: '4',
+    //     icon: React.createElement(UserOutlined),
+    //     label: `Users Muscles`,
+    //     url: '/dashboard/users/:id/muscles'
+    // },
 ]
 
-export const governmentOfficerPages: SideBarPage[] = [
-    {
-        key: '1',
-        icon: React.createElement(PicCenterOutlined),
-        label: `Digital certificates Confirmation`,
-        url: '/digital-certificates-confirmation'
-    },
-]
 
 export const userPages: SideBarPage[] = [
     {
         key: '1',
         icon: React.createElement(PicCenterOutlined),
-        label: `Digital Certificate`,
-        url: '/digital-certificate'
+        label: `Home`,
+        url: '/'
     },
+    {
+        key: '2',
+        icon: React.createElement(PicCenterOutlined),
+        label: `Courses`,
+        url: '/courses'
+    },
+    {
+        key: '3',
+        icon: React.createElement(PicCenterOutlined),
+        label: `Profile`,
+        url: '/profile'
+    }
 ]

@@ -1,5 +1,7 @@
+import { Image } from "antd";
+
 export const testColumns : any[] = [
-    {
+      {
         title:'name',
         dataIndex:'name',
         key:'name'
@@ -10,70 +12,39 @@ export const testColumns : any[] = [
         key:'email'
       }
 ];
-
-
-export const usersColumn : any[] = [
+export const coursesColumns :any[] = [
     {
-        title:'First Name',
-        dataIndex:'firstName',
-        key:'firstName'
+        title:'Name',
+        dataIndex:'name',
+        key:'name'
     },
     {
-        title:'Middle Name',
-        dataIndex:'middleName',
-        key:'middleName'
+        title:'Left days',
+        dataIndex:'left_days',
+        key:'left_days'
     },
     {
-        title:'Last Name',
-        dataIndex:'lastName',
-        key:'lastName'
+        title:'Duration',
+        dataIndex:'duration',
+        key:'duration'
     },
-    {
-        title:'organization',
-        dataIndex:'lastName',
-        key:'lastName'
-    },
-    {
-        title:'Email',
-        dataIndex:'email',
-        key:'email'
-    }
 ];
 
-
-export const adminsColumns : any[] = [
+export const DayExercises :any[] = [
     {
-        title:'First Name',
-        dataIndex:'firstName',
-        key:'firstName'
+      title:'Name',
+      render: item => item.exercise.name
     },
     {
-        title:'Last Name',
-        dataIndex:'lastName',
-        key:'lastName'
+      title:'Count',
+      render: item => item.exercise.set_count
     },
     {
-        title:'Role',
-        dataIndex:'role',
-        key:'role'
+      title:'Times',
+      render: item => item.exercise.times
     },
     {
-        title:'Email',
-        dataIndex:'email',
-        key:'email'
-    }
-];
-
-
-export const documentColumns : any[]= [
-    {
-        title:'Contract Name',
-        dataIndex:'contractName',
-        key:'contractName'
-    },
-    {
-        title:'Status',
-        dataIndex:'status',
-        key:'status'
+      title:'level',
+      render: item => item.exercise.level
     }
 ];

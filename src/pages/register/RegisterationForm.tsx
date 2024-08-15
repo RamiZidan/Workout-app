@@ -5,7 +5,7 @@ import { Form, Input, Button, Checkbox, Select, TimePicker } from 'antd'
 import { useRegisterMutation } from '../../features/auth/authApiSlice'
 import { message } from 'antd'
 import moment from 'moment'
-import { showErrors } from '../../functions/functions'
+import { showErrors } from '../../functions/helpers'
 
 type RegisterFieldType = {
     name:string;

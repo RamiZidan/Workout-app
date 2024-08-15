@@ -1,12 +1,13 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux"
-import { selectCurrentToken } from "./authSlice";
+import { selectCurrentPermission, selectCurrentToken } from "./authSlice";
 
 interface RequireAuthProps {
     isRequired: boolean
 }
 const RequireAuth: React.FC<RequireAuthProps> = ({ isRequired = true }) => {
     const token = useSelector(selectCurrentToken)
+    
     const location = useLocation()
     return (
         isRequired

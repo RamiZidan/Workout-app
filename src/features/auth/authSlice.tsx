@@ -32,10 +32,11 @@ const authSlice = createSlice({
     initialState: intiState,
     reducers: {
         setCredentials: (state, action) => {
-            const { access_token  } = action.payload
-            const auth = { access_token}
+            const { access_token, is_admin  } = action.payload
+            const auth = { access_token , is_admin  }
             localStorage.setItem('auth', JSON.stringify(auth))
             state.access_token = access_token ; 
+            state.is_admin = is_admin; 
         },
         setUserData: (state , action ) =>{
             const { id, name , is_admin , level ,image    } = action.payload

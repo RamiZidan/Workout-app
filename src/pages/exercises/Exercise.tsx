@@ -1,0 +1,146 @@
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Col, Grid, Image, Rate, Row, message } from 'antd'
+import React, { useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { convertToFormData, getTimeString } from '../../functions/helpers';
+
+function Exercises() {
+  const navigate = useNavigate();
+  const [exerciseStatus , setExerciseStatus] = useState(1) ; // 1 , 2 , 3 , 4 (not stated , playing , done , rated  )
+  const [duration, setDuration] = useState() ;
+  const [startTime, setStartTime] = useState(null);
+  const [doneExercises , setDoneExercises] = useState([]);
+  const [now, setNow] = useState(null);
+  const intervalRef = useRef(null);
+  const timeString = getTimeString(now, startTime);
+  const exercises = [ {id:1 } , {id:2 } , {id:12} , {id:20} , {id:0 }] ;
+  const {courseId , dayId , exerciseId } = useParams() ;
+  const nav = (toId:any)=>{
+    navigate(`/courses/${courseId}/days/${dayId}/exercises/${Number(toId)}`);
+
+  }
+  const getIdIndex = (id:string)=>{
+    let matchIndex= -1;
+    exercises?.map((exercise:any,index:number)=>{
+      console.log(id , exercise);
+      if(exercise.id == id ){
+        matchIndex = index; 
+      }
+    });
+    return matchIndex;
+  }
+  const prev = ()=>{
+    const prevIndex = getIdIndex((exerciseId))-1;
+    if(prevIndex > 0 )
+      nav(exercises[prevIndex].id );
+  }
+  const next = ()=>{
+    if(exerciseStatus != 4 && !doneExercises.includes(exerciseId) ){
+      message.error('Please finish your exersise and rate the exersise to continue');
+      return ;
+    }
+    setDoneExercises([...doneExercises , exerciseId]);
+    const nextIndex = getIdIndex((exerciseId))+1 ;
+    setExerciseStatus(1);
+
+    if(nextIndex== exercises.length-1){
+      message.success('congrats you finished your exerecises for today');
+      navigate('/courses');
+      return ;
+    }
+    nav(exercises[nextIndex].id );
+  }
+  const feedback = (feed_back:any)=>{
+      let data = {feed_back ,duration: timeString.split('.')[0] , day_exercise_id: exerciseId  };
+      data = convertToFormData(data);
+      // send request 
+
+      setExerciseStatus(4);
+  }
+
+  const handleStart = () => {
+    setStartTime(Date.now());
+    setNow(Date.now());
+
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setNow(Date.now());
+    }, 10);
+  };
+  
+
+  const handleStop = () => {
+    console.log(timeString);
+    clearInterval(intervalRef.current);
+  };
+
+
+  
+  return (
+    <>
+    
+
+      {/* <Image width={400} src="" /> */}
+      {/* <Row > */}
+      
+        <Row justify="center" align="middle">
+          <Col >
+              <Button onClick={prev}>
+                <LeftOutlined></LeftOutlined>
+              </Button>
+          </Col>
+          <Col>
+              <Image width={400} src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+          </Col>
+          <Col>
+              <Button onClick={next}>
+                  <RightOutlined></RightOutlined>
+              </Button>     
+          </Col>
+
+        </Row>
+        <Row justify={'center'}>
+          <Col>
+          {
+            exerciseStatus == 3 ? <div>
+              <Rate onChange={feedback} ></Rate>
+            </div>
+            :
+            <> </>
+          }
+          {
+            exerciseStatus == 1 ? <div>
+              <Button
+                onClick={()=>{
+                  setExerciseStatus(2)
+                  handleStart()
+                }}
+              > Start </Button>
+            </div>
+            :
+            <> </>
+          }
+          {
+            exerciseStatus == 2 ? <div>
+              Time: {timeString.split('.')[0]}
+            </div>:<></>
+          }
+          {
+            exerciseStatus == 2 ? <div>
+              <Button
+                onClick={()=>{
+                  setExerciseStatus(3)
+                  handleStop()
+                }}
+              > 
+                Stop
+              </Button>
+            </div>:<></>
+          }
+          </Col>
+        </Row>
+    </>
+  )
+}
+
+export default Exercises

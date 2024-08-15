@@ -23,11 +23,20 @@ const Login = () => {
   const onFinish: FormProps<LoginFieldType>['onFinish'] = async (values) => {
     try {
       const userData = await login({ ...values}).unwrap()
-      console.log(userData?.data) ;
+      // console.log(userData?.data) ;
+      
       dispatch(setCredentials(userData?.data))
       message.success('Login Successful')
       // form.resetFields()
-      navigate('/')
+      console.log(userData?.data?.is_admin == 1);
+      if(userData?.data?.is_admin == 1 ) {
+        // navigate('/dashboard');
+        // message.success('dashboard');
+      }
+      else{
+        // navigate('/')
+        // message.success('user');
+      }
     } catch (error: any) {
       message.error('Wrong Credentials')
     }

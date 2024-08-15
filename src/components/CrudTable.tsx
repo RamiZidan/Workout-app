@@ -7,52 +7,84 @@ interface params {
     dataSource: any[]
     columns: any[]
     actions?: any[]
-    endpoint: string
-    route: string
+    endpoint?: string
+    route?: string
+    mutations?: any
+    defaultActions?: any[]
 }
 
+/*
+    mutations 
+    ['delete' , 'view' , 'update'  ]
 
-function CrudTable({ dataSource, columns, endpoint, route, actions  }: params) {
+*/
+
+
+
+function CrudTable({ 
+    dataSource, 
+    columns, 
+    endpoint, 
+    route, 
+    mutations , 
+    defaultActions = [], 
+    actions = []  }: params) {
+
+
     const navigate = useNavigate() ;
-    if(!actions)
-        actions = [
-            {
-                title: <FolderViewOutlined></FolderViewOutlined> ,
-                handler(record:any) {
-                    navigate(`${route}/${record.id}`)
-                },
+    [
+        {
+            title:'view',
+            icon: <FolderViewOutlined></FolderViewOutlined> ,
+            handler(record:any) {
+                navigate(`${route}/${record.id}`)
             },
-            {
-                title:  <DeleteOutlined></DeleteOutlined> ,
-                handler (record:any)  {        
-                    console.log(record) ;    
-                    const url = `${endpoint}/${record.id}` ;    
-                    
+        },
+        {
+            title:'delete',
+            icon :  <DeleteOutlined></DeleteOutlined> ,
+            handler (record:any)  {        
+                   
+                mutations.delete(record.id);
+            },
+            render(record:any){
+                
+                return <Popconfirm
+                        title="Delete"
+                        description="Are you sure to delete this task?"
+                        okText="Yes"
+                        cancelText="No"
+                        onConfirm={()=>this.handler(record)}
+                    >
+                        <a>
+                            <DeleteOutlined></DeleteOutlined>
+                        </a>
+                    </Popconfirm>
+            }
+        },
+        {
+            title:'update',
+            icon: <EditOutlined></EditOutlined> ,
+            handler(record:any) {
+                
+                // navigate(`${route}/${record.id}/edit`)
+            },
+        },
+    ].map((action:any)=>{
+        defaultActions?.map((defaultAction:any)=>{
+            if(action.title == defaultAction){
+                let ovverride = 0;
+                actions.map((overrideAction:any)=>{
+                    if(overrideAction.title == action.title ){
+                        ovverride = 1 ;
+                    }
+                })
+                if(ovverride) return ;
 
-                },
-                render(record:any){
-                    
-                    return <Popconfirm
-                            title="Delete"
-                            description="Are you sure to delete this task?"
-                            okText="Yes"
-                            cancelText="No"
-                            onConfirm={()=>this.handler(record)}
-                        >
-                            <a>
-                                <DeleteOutlined></DeleteOutlined>
-                            </a>
-                        </Popconfirm>
-
-                }
-            },
-            {
-                title: <EditOutlined></EditOutlined> ,
-                handler(record:any) {
-                    navigate(`${route}/${record.id}/edit`)
-                },
-            },
-        ]    
+                actions = [...actions , action ] ;
+            }
+        })
+    }) 
 
 
     const actionsColumn: any[] = [
@@ -72,7 +104,7 @@ function CrudTable({ dataSource, columns, endpoint, route, actions  }: params) {
                             }
                             else {
                                 
-                                return <a onClick={() => action.handler(record)} > {action.title} </a>
+                                return <a onClick={() => action.handler(record)} > {action.icon} </a>
                             }
                         })
                     }

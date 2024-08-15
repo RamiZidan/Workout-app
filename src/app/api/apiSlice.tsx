@@ -20,6 +20,7 @@ const baseQuery = fetchBaseQuery({
         const token = getState().auth.access_token
         if (token) {
             headers.set('authorization', `Bearer ${token}`)
+            headers.set('Content-Type','application/x-www-form-urlencoded');
         }
         return headers
     }  
