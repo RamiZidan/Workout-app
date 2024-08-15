@@ -33,18 +33,18 @@ export const coursesColumns :any[] = [
 export const DayExercises :any[] = [
     {
       title:'Name',
-      render: item => item.exercise.name
+      render: item => item?.name
     },
     {
       title:'Count',
-      render: item => item.exercise.set_count
+      render: item => item?.set_count
     },
     {
       title:'Times',
-      render: item => item.exercise.times
+      render: item => item?.times
     },
     {
       title:'level',
-      render: item => item.exercise.level
+      render: item => item?.level
     }
 ];

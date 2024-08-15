@@ -75,7 +75,7 @@ function CourseDays() {
       navigate(`${route}/${params.courseId}/days/${record?.id}`);
     }
     else if(action == 'start'){
-      navigate(`${route}/${params.courseId}/days/${record?.id}/exercises/1`)
+      navigate(`${route}/${params.courseId}/days/${record?.id}/exercises/${record.first_exercise}`)
     }
   },[action , record])
 

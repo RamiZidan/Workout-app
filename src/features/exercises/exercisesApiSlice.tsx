@@ -48,6 +48,13 @@ export const exercisesApiSlice = apiSlice.injectEndpoints({
                 url:`/website/courses/${courseId}/course_day/${dayId}/day_exercise`,
                 method:'GET',
             })
+        }),
+        createFeedback: builder.mutation({
+            query: (data)=>({
+                url:`/website/practices`,
+                method:'POST',
+                body: data 
+            })
         })
     })
 })
@@ -60,5 +67,6 @@ export const {
     useGetExercisesByCourseIdAndDayIdQuery,
     useGetExercisesByIdQuery,
     useGetExercisesQuery,
+    useCreateFeedbackMutation
 
 } = exercisesApiSlice

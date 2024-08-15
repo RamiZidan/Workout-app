@@ -1,9 +1,9 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Col, Grid, Image, Rate, Row, message } from 'antd'
+import { Button, Col, Grid, Image, Rate, Row, Tag, message } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { convertToFormData, getTimeString } from '../../functions/helpers';
-import { useGetExercisesByCourseIdAndDayIdQuery } from '../../features/exercises/exercisesApiSlice';
+import { convertToFormData, getTimeString, showErrors } from '../../functions/helpers';
+import { useCreateFeedbackMutation, useGetExercisesByCourseIdAndDayIdQuery } from '../../features/exercises/exercisesApiSlice';
 import { useDispatch } from 'react-redux';
 
 function Exercises() {
@@ -15,10 +15,17 @@ function Exercises() {
   const [now, setNow] = useState(null);
   const intervalRef = useRef(null);
   const timeString = getTimeString(now, startTime);
+  const [createFeedback , {}] = useCreateFeedbackMutation() ;
   // const exercises = [ {id:1 } , {id:2 } , {id:12} , {id:20} , {id:0 }] ;
-  const {courseId , dayId , exerciseId } = useParams() ;
+  let {courseId , dayId , exerciseId } = useParams() ;
+
   let {data: exercises , isLoading} = useGetExercisesByCourseIdAndDayIdQuery({courseId , dayId});
-  exercises = exercises?.day_exercises?.map((exercise:any)=> exercise?.exercise) ;
+  exercises = exercises?.day_exercises?.map((exercise:any)=> {
+    let newExercise = {...exercise?.exercise} ;
+    newExercise = {...newExercise , id : exercise?.id} ;
+    return newExercise; 
+  }) ;
+
   if(isLoading){
     return <>
       Loading ...
@@ -41,7 +48,6 @@ function Exercises() {
   const getIdIndex = (id:string)=>{
     let matchIndex= -1;
     exercises?.map((exercise:any,index:number)=>{
-      console.log(id , exercise);
       if(exercise.id == id ){
         matchIndex = index; 
       }
@@ -50,7 +56,7 @@ function Exercises() {
   }
   const prev = ()=>{
     const prevIndex = getIdIndex((exerciseId))-1;
-    if(prevIndex > 0 )
+    if(prevIndex >= 0 )
       nav(exercises[prevIndex].id );
   }
   const next = ()=>{
@@ -69,12 +75,17 @@ function Exercises() {
     }
     nav(exercises[nextIndex].id );
   }
-  const feedback = (feed_back:any)=>{
+  const feedback =async  (feed_back:any)=>{
       let data = {feed_back ,duration: timeString.split('.')[0] , day_exercise_id: exerciseId  };
       data = convertToFormData(data);
-      // send request 
+      try{
+        let res= await createFeedback(data).unwrap();
+        setExerciseStatus(4);
+      }
+      catch(err){
+        showErrors(err);
+      }
 
-      setExerciseStatus(4);
   }
 
   const handleStart = () => {
@@ -89,10 +100,8 @@ function Exercises() {
   
 
   const handleStop = () => {
-    console.log(timeString);
     clearInterval(intervalRef.current);
   };
-
 
   
   return (
@@ -101,7 +110,17 @@ function Exercises() {
 
       {/* <Image width={400} src="" /> */}
       {/* <Row > */}
-      
+        <Row style={{ margin:'1rem' }} justify={'center'} >
+          <Tag>
+            Counts: {currentExercise?.set_count}
+          </Tag>
+          <Tag>
+            Times : {currentExercise?.times}
+          </Tag>
+          <Tag>
+            Level : {currentExercise?.level}
+          </Tag>
+        </Row>
         <Row justify="center" align="middle">
           <Col >
               <Button onClick={prev}>
@@ -118,11 +137,13 @@ function Exercises() {
           </Col>
 
         </Row>
-        <Row justify={'center'}>
-          <Col>
+        <Row justify={'center'} style={{ margin:'1rem' }} >
+          <Col >
           {
             exerciseStatus == 3 ? <div>
-              <Rate onChange={feedback} ></Rate>
+              <Rate
+              defaultValue={3}
+              onChange={feedback} ></Rate>
             </div>
             :
             <> </>

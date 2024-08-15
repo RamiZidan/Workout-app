@@ -12,8 +12,13 @@ function Exercises() {
   const {data , isLoading} = useGetExercisesQuery({});
   const {courseId , dayId } =useParams();
   let {data: day_exercises } = useGetExercisesByCourseIdAndDayIdQuery({courseId , dayId});
-  day_exercises = day_exercises?.day_exercises?.map((exercise:any)=> exercise?.exercise) ;
-  
+
+  day_exercises = day_exercises?.day_exercises?.map((exercise:any)=>  {
+    let newExercise = {...exercise?.exercise} ;
+    newExercise = {...newExercise , id : exercise?.id} ;
+    return newExercise; 
+  });
+  console.log(day_exercises);
   const exercises = data?.exercises.map((exercise:any)=>{
     return {
       label:exercise.name ,
