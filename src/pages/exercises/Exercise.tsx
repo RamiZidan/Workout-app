@@ -1,5 +1,5 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Col, Grid, Image, Rate, Row, Tag, message } from 'antd'
+import { Button, Col, Image, Rate, Row, Tag, message } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { convertToFormData, getTimeString, showErrors } from '../../functions/helpers';
@@ -68,7 +68,7 @@ function Exercises() {
     const nextIndex = getIdIndex((exerciseId))+1 ;
     setExerciseStatus(1);
 
-    if(nextIndex== exercises.length-1){
+    if(nextIndex== exercises?.length){
       message.success('congrats you finished your exerecises for today');
       navigate('/courses');
       return ;

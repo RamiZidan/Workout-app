@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import CrudTable from '../../components/CrudTable'
-import { DayExercises } from '../../constants/columns'
+import { dayExercisesColumns } from '../../constants/columns'
 import { AllExercises, DayExercisesDataSource } from '../../constants/fake'
 import { Button, Row, Select } from 'antd'
 import { useGetExercisesByCourseIdAndDayIdQuery, useGetExercisesQuery } from '../../features/exercises/exercisesApiSlice'
 import { useParams } from 'react-router-dom'
 
-function Exercises() {
+function DayExercises() {
   
   const [exerciseId , setExerciseId] = useState() ;
   const {data , isLoading} = useGetExercisesQuery({});
@@ -44,13 +44,13 @@ function Exercises() {
           <Button onClick={addExercise}
             style={{backgroundColor:'#5099ff'}}
           >
-            Add 
+            Add New Exercise
           </Button>
         </Row>
 
       <div>
         <CrudTable
-          columns={DayExercises}
+          columns={dayExercisesColumns}
           dataSource={day_exercises}
           route={'/'}
           defaultActions={['delete']}
@@ -64,4 +64,4 @@ function Exercises() {
   )
 }
 
-export default Exercises
+export default DayExercises

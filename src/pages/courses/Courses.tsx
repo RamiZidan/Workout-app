@@ -6,7 +6,7 @@ import { coursesColumns} from '../../constants/columns'
 import { FolderViewOutlined, PlayCircleFilled } from '@ant-design/icons'
 import { useDeleteCourseMutation, useGetCoursesQuery } from '../../features/courses/coursesApiSlice'
 import { Course, selectCourses } from '../../features/courses/coursesSlice'
-import { message } from 'antd'
+import { Button, Col, Row, message } from 'antd'
 import { useSelector } from 'react-redux'
 import { useUpdateProfileMutation } from '../../features/auth/authApiSlice'
 import { convertToFormData, showErrors } from '../../functions/helpers'
@@ -66,6 +66,18 @@ const Courses = () => {
 
   return (
     <div>
+      
+      <Row justify={'end'} >
+        
+        <Col>
+          <Button
+            style={{backgroundColor:'#5099ff'}}
+          >
+            Add New Course
+          </Button>
+        </Col>
+        
+      </Row>
       <CrudTable
         columns={coursesColumns}
         dataSource={courses}

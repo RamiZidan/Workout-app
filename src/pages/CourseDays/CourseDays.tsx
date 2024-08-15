@@ -32,15 +32,15 @@ function CourseDays() {
 
   const actions: React.ReactNode[] = [
     {
-      title:'view',
-      icon: <FolderViewOutlined key="view" onClick={(e:any)=>{ 
-        setAction('view');   
-      }} />
-    },
-    {
       title: 'start',
       icon: <PlayCircleOutlined key='start' onClick={(e:any)=>{
         setAction('start');
+      }} />
+    },
+    {
+      title:'view',
+      icon: <FolderViewOutlined key="view" onClick={(e:any)=>{ 
+        setAction('view');   
       }} />
     },
     {title: 'edit' , icon: <EditOutlined key="edit" onClick={()=>setAction('edit')} />},

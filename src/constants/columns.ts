@@ -30,7 +30,7 @@ export const coursesColumns :any[] = [
     },
 ];
 
-export const DayExercises :any[] = [
+export const dayExercisesColumns :any[] = [
     {
       title:'Name',
       render: item => item?.name

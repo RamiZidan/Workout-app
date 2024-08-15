@@ -2,7 +2,7 @@ import UserHome from "../../pages/home/UserHome";
 import type { RouteObject } from "react-router-dom";
 import Profile from "../../pages/profile/Profile";
 import CourseDays from "../../pages/CourseDays/CourseDays";
-import Exercises from "../../pages/exercises/Exercises";
+import DayExercises from "../../pages/exercises/DayExercises";
 import Exercise from "../../pages/exercises/Exercise";
 import Courses from "../../pages/courses/Courses";
 import Muscles from "../../pages/dashboard/muscles/Muscles";
@@ -25,7 +25,7 @@ export const userRoutes:RouteObject[] = [
     },
     {
         path: '/courses/:courseId/days/:dayId',
-        element: <Exercises></Exercises>
+        element: <DayExercises></DayExercises>
     },
     {
         path: '/courses/:courseId/days/:dayId/exercises/:exerciseId',
@@ -65,7 +65,7 @@ export const adminRoutes:RouteObject[] = [
     },
     {
         path:'/dashboard/courses/:courseId/days/:dayId',
-        element:<Exercises></Exercises>
+        element:<DayExercises></DayExercises>
     },
     // {
     //     path:'/dashboard/users/:id',

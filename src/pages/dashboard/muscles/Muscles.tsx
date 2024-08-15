@@ -1,7 +1,7 @@
 import React from 'react'
 import CrudTable from '../../../components/CrudTable'
 import { MusclesDataSource } from '../../../constants/fake'
-import { Image } from 'antd';
+import { Button, Col, Image, Row } from 'antd';
 import { useDeleteMuscleMutation, useGetMusclesQuery } from '../../../features/muscles/musclesApiSlice';
 import { showErrors } from '../../../functions/helpers';
 function Muscles() {
@@ -37,6 +37,18 @@ function Muscles() {
   
   return (
     <>
+    
+      <Row justify={'end'} >
+        
+        <Col>
+          <Button
+            style={{backgroundColor:'#5099ff'}}
+          >
+            Add New Muscle
+          </Button>
+        </Col>
+        
+      </Row>
       <CrudTable
         columns={MusclesColumn}
         dataSource={muscles}
