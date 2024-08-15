@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { courseDays } from '../../constants/fake'
-import { Button, Card, Col, Row } from 'antd';
+// import { courseDays } from '../../constants/fake'
+import { Button, Card, Col, Popconfirm, Row } from 'antd';
 import {  DeleteOutlined, EditOutlined, FolderViewOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useCreateCourseDayMutation, useDeleteCourseDayMutation, useEditCourseDayMutation, useGetCourseDaysQuery } from '../../features/courseDays/courseDaysApiSlice';
+import { showErrors } from '../../functions/helpers';
 
 
 function CourseDays() {
-  // const getId = (e:any)=>{
-  //   return e?.target?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.classList ;
-  // }
-  // const getKey = (e:any)=>{
-  //   return e?.target?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.parentNode?.classList ;
-  // }
+
   const [record ,setRecord ] = useState({}) ;
   const [action , setAction] = useState('') ; 
-
   const params = useParams() ;
+  const {courseId} = params ;
+  const {data , isLoading} = useGetCourseDaysQuery({courseId});
+  const [deleteCourseDay , {} ] = useDeleteCourseDayMutation();
+  const [editCourseDay , {}] = useEditCourseDayMutation();
+  const [createCourseDay , {}] = useCreateCourseDayMutation() ;
+
+  const courseDays = data?.course_days ;
+  console.table(courseDays);
   const navigate = useNavigate() ;
   const location = useLocation();
   let route = '/courses' ;
   let mutations =['user mutations'] ; 
   const pathname = location.pathname ;
   if(pathname.includes('dashboard')){
-    mutations = ['admin mutations'] ;
+    // mutations =  ;
     route = '/dashboard/courses';
   }
 
@@ -40,7 +44,27 @@ function CourseDays() {
       }} />
     },
     {title: 'edit' , icon: <EditOutlined key="edit" onClick={()=>setAction('edit')} />},
-    {title: 'delete', icon: <DeleteOutlined key="delete"  onClick={()=>setAction('delete')} />,}
+    {title: 'delete', icon:<>
+            <Popconfirm
+                        title="Delete"
+                        description="Are you sure to delete this task?"
+                        okText="Yes"
+                        cancelText="No"
+                        onConfirm={async ()=>{
+                          try{
+                            let res = await deleteCourseDay({courseId, dayId:record.id}).unwrap();
+                          }
+                          catch(err){
+                            showErrors(err);
+                          }
+                        }}
+                    >
+                        <a>
+                            <DeleteOutlined></DeleteOutlined>
+                        </a>
+                    </Popconfirm>
+    </> 
+    }
   ].filter((action:any)=>{
     if(action.title == 'start' && pathname.includes('dashboard'))return false ;
     return true; 
@@ -48,10 +72,10 @@ function CourseDays() {
   useEffect(()=>{
     console.log(action ,record );
     if(action == 'view'){
-      navigate(`${route}/${params.id}/days/${record?.id}`);
+      navigate(`${route}/${params.courseId}/days/${record?.id}`);
     }
     else if(action == 'start'){
-      navigate(`${route}/${params.id}/days/${record?.id}/exercises/1`)
+      navigate(`${route}/${params.courseId}/days/${record?.id}/exercises/1`)
     }
   },[action , record])
 

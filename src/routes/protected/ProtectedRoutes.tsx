@@ -20,7 +20,7 @@ export const userRoutes:RouteObject[] = [
         element: <Courses/>
     },
     {
-        path: '/courses/:id/days',
+        path: '/courses/:courseId/days',
         element: <CourseDays></CourseDays>
     },
     {
@@ -60,7 +60,7 @@ export const adminRoutes:RouteObject[] = [
         element:<Courses></Courses>,
     },
     {
-        path:'/dashboard/courses/:id/days',
+        path:'/dashboard/courses/:courseId/days',
         element:<CourseDays></CourseDays>
     },
     {

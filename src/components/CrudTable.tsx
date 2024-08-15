@@ -44,11 +44,10 @@ function CrudTable({
             title:'delete',
             icon :  <DeleteOutlined></DeleteOutlined> ,
             handler (record:any)  {        
-                   
+                console.log('rec',record);
                 mutations.delete(record.id);
             },
             render(record:any){
-                
                 return <Popconfirm
                         title="Delete"
                         description="Are you sure to delete this task?"

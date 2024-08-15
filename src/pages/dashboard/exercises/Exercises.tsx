@@ -2,8 +2,13 @@ import React from 'react'
 import CrudTable from '../../../components/CrudTable'
 import { Image } from 'antd'
 import { ExercisesDataSource } from '../../../constants/fake'
+import { useDeleteExerciseMutation, useGetExercisesQuery } from '../../../features/exercises/exercisesApiSlice';
+import { showErrors } from '../../../functions/helpers';
 
 function Exercises() {
+  const {data , isLoading} = useGetExercisesQuery({});
+  const exercises = data?.exercises ;
+  const [deleteExercise , {}] = useDeleteExerciseMutation();
 
 const dashboardExercises :any[] =[
   {
@@ -31,20 +36,32 @@ const dashboardExercises :any[] =[
     render : item =>{
       return <Image
         width={100}
-        src={item.image}
+        src={ `${import.meta.env.VITE_REACT_API_KEY.split('/api')[0]}/${item.image}` }
       >
         
       </Image>
     }
   }
 ]
+  let mutations = {
+    delete:async (id:any)=>{
+      try{
+        let res = await deleteExercise({id}).unwrap();
+
+      }
+      catch(err){
+        showErrors(err);
+      }
+    }
+  }
   return (
     <CrudTable
       columns={dashboardExercises}
-      dataSource={ExercisesDataSource}
+      dataSource={exercises}
       route='/dashboard/exercises'
       endpoint='/'
-      defaultActions={['view','delete','update']}
+      defaultActions={['delete','update']}
+      mutations={mutations}
     />
   )
 }

@@ -3,11 +3,18 @@ import CrudTable from '../../components/CrudTable'
 import { DayExercises } from '../../constants/columns'
 import { AllExercises, DayExercisesDataSource } from '../../constants/fake'
 import { Button, Row, Select } from 'antd'
+import { useGetExercisesQuery } from '../../features/exercises/exercisesApiSlice'
 
 function Exercises() {
   
   const [exerciseId , setExerciseId] = useState() ;
-
+  const {data , isLoading} = useGetExercisesQuery({});
+  const exercises = data?.exercises.map((exercise)=>{
+    return {
+      label:exercise.name ,
+      value:exercise.id
+    }
+  }) ;
   const addExercise = ()=>{
     // send request 
   } 
@@ -18,7 +25,7 @@ function Exercises() {
       
         <Row justify={'end'} >
           <Select
-            options={AllExercises }
+            options={exercises }
             onChange={(e)=>setExerciseId(e)}
             style={{ width: 120 }}
           >
