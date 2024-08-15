@@ -43,7 +43,7 @@ export const exercisesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags:['exercises']
         }),
-        getExercisesByCourseDayId: builder.mutation({
+        getExercisesByCourseIdAndDayId: builder.query({
             query: ({courseId , dayId }) => ({
                 url:`/website/courses/${courseId}/course_day/${dayId}/day_exercise`,
                 method:'GET',
@@ -57,7 +57,7 @@ export const {
     useCreateExerciseMutation,
     useDeleteExerciseMutation,
     useEditExerciseMutation,
-    useGetExercisesByCourseDayIdMutation,
+    useGetExercisesByCourseIdAndDayIdQuery,
     useGetExercisesByIdQuery,
     useGetExercisesQuery,
 

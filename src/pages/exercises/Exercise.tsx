@@ -3,6 +3,8 @@ import { Button, Col, Grid, Image, Rate, Row, message } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { convertToFormData, getTimeString } from '../../functions/helpers';
+import { useGetExercisesByCourseIdAndDayIdQuery } from '../../features/exercises/exercisesApiSlice';
+import { useDispatch } from 'react-redux';
 
 function Exercises() {
   const navigate = useNavigate();
@@ -13,8 +15,25 @@ function Exercises() {
   const [now, setNow] = useState(null);
   const intervalRef = useRef(null);
   const timeString = getTimeString(now, startTime);
-  const exercises = [ {id:1 } , {id:2 } , {id:12} , {id:20} , {id:0 }] ;
+  // const exercises = [ {id:1 } , {id:2 } , {id:12} , {id:20} , {id:0 }] ;
   const {courseId , dayId , exerciseId } = useParams() ;
+  let {data: exercises , isLoading} = useGetExercisesByCourseIdAndDayIdQuery({courseId , dayId});
+  exercises = exercises?.day_exercises?.map((exercise:any)=> exercise?.exercise) ;
+  if(isLoading){
+    return <>
+      Loading ...
+    </>
+  }
+  
+  if(exercises?.length == 0 ){
+    message.error('No exercises in this course day, please add some and try again') ;
+    
+    return <>
+      
+    </>
+  }
+  // console.table(exercises);
+  const currentExercise = exercises?.filter((exercise:any)=> exercise.id == exerciseId)?.[0] ;
   const nav = (toId:any)=>{
     navigate(`/courses/${courseId}/days/${dayId}/exercises/${Number(toId)}`);
 
@@ -90,7 +109,7 @@ function Exercises() {
               </Button>
           </Col>
           <Col>
-              <Image width={400} src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+              <Image width={400} src={ `${import.meta.env.VITE_REACT_API_KEY.split('/api')[0]}/storage/${currentExercise?.image}`} />
           </Col>
           <Col>
               <Button onClick={next}>

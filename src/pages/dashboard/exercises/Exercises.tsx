@@ -36,7 +36,7 @@ const dashboardExercises :any[] =[
     render : item =>{
       return <Image
         width={100}
-        src={ `${import.meta.env.VITE_REACT_API_KEY.split('/api')[0]}/${item.image}` }
+        src={ `${import.meta.env.VITE_REACT_API_KEY.split('/api')[0]}/storage/${item.image}` }
       >
         
       </Image>

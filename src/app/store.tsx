@@ -6,6 +6,7 @@ import authReducer from '../features/auth/authSlice'
 import { coursesApiSlice } from '../features/courses/coursesApiSlice'
 import { courseDaysApiSlice } from '../features/courseDays/courseDaysApiSlice'
 import { exercisesApiSlice } from '../features/exercises/exercisesApiSlice'
+import { musclesApiSlice } from '../features/muscles/musclesApiSlice'
 // store (state,(reducers(actions to dispatch)))
 
 export const store = configureStore({
@@ -14,7 +15,9 @@ export const store = configureStore({
         auth: authReducer,
         [coursesApiSlice.reducerPath]:coursesApiSlice.reducer,
         [courseDaysApiSlice.reducerPath]:courseDaysApiSlice.reducer,
-        [exercisesApiSlice.reducerPath]: exercisesApiSlice.reducer 
+        [exercisesApiSlice.reducerPath]: exercisesApiSlice.reducer ,
+        [musclesApiSlice.reducerPath]:musclesApiSlice.reducer,
+        
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({serializableCheck: false,}).concat(apiSlice.middleware)

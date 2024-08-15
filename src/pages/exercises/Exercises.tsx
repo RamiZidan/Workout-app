@@ -3,13 +3,18 @@ import CrudTable from '../../components/CrudTable'
 import { DayExercises } from '../../constants/columns'
 import { AllExercises, DayExercisesDataSource } from '../../constants/fake'
 import { Button, Row, Select } from 'antd'
-import { useGetExercisesQuery } from '../../features/exercises/exercisesApiSlice'
+import { useGetExercisesByCourseIdAndDayIdQuery, useGetExercisesQuery } from '../../features/exercises/exercisesApiSlice'
+import { useParams } from 'react-router-dom'
 
 function Exercises() {
   
   const [exerciseId , setExerciseId] = useState() ;
   const {data , isLoading} = useGetExercisesQuery({});
-  const exercises = data?.exercises.map((exercise)=>{
+  const {courseId , dayId } =useParams();
+  let {data: day_exercises } = useGetExercisesByCourseIdAndDayIdQuery({courseId , dayId});
+  day_exercises = day_exercises?.day_exercises?.map((exercise:any)=> exercise?.exercise) ;
+  
+  const exercises = data?.exercises.map((exercise:any)=>{
     return {
       label:exercise.name ,
       value:exercise.id
@@ -41,7 +46,7 @@ function Exercises() {
       <div>
         <CrudTable
           columns={DayExercises}
-          dataSource={DayExercisesDataSource}
+          dataSource={day_exercises}
           route={'/'}
           defaultActions={['delete']}
         />
