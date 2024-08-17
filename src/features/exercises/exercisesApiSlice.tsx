@@ -47,7 +47,8 @@ export const exercisesApiSlice = apiSlice.injectEndpoints({
             query: ({courseId , dayId }) => ({
                 url:`/website/courses/${courseId}/course_day/${dayId}/day_exercise`,
                 method:'GET',
-            })
+            }),
+            providesTags:['dayExercise']
         }),
         createFeedback: builder.mutation({
             query: (data)=>({
@@ -55,6 +56,14 @@ export const exercisesApiSlice = apiSlice.injectEndpoints({
                 method:'POST',
                 body: data 
             })
+        }),
+        addDayExercise: builder.mutation({
+            query: ({courseId , dayId , data })=>({
+                url:`/website/courses/${courseId}/course_day/${dayId}/day_exercise`,
+                method:'POST',
+                body: data
+            }),
+            invalidatesTags:['dayExercise']
         })
     })
 })
@@ -67,6 +76,7 @@ export const {
     useGetExercisesByCourseIdAndDayIdQuery,
     useGetExercisesByIdQuery,
     useGetExercisesQuery,
-    useCreateFeedbackMutation
+    useCreateFeedbackMutation,
+    useAddDayExerciseMutation
 
 } = exercisesApiSlice

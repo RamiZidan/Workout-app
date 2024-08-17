@@ -11,6 +11,7 @@ interface params {
     route?: string
     mutations?: any
     defaultActions?: any[]
+
 }
 
 /*
@@ -26,7 +27,7 @@ function CrudTable({
     columns, 
     endpoint, 
     route, 
-    mutations , 
+    mutations ,
     defaultActions = [], 
     actions = []  }: params) {
 
@@ -48,12 +49,17 @@ function CrudTable({
                 mutations.delete(record.id);
             },
             render(record:any){
+                console.log('render');
                 return <Popconfirm
                         title="Delete"
-                        description="Are you sure to delete this task?"
+                        description="Are you sure to delete this exercise?"
                         okText="Yes"
                         cancelText="No"
-                        onConfirm={()=>this.handler(record)}
+                        onCancel={()=>{console.log('no')}}
+                        onConfirm={()=>{
+                            console.log('in')
+                            this.handler(record)
+                        }}
                     >
                         <a>
                             <DeleteOutlined></DeleteOutlined>
@@ -65,24 +71,29 @@ function CrudTable({
             title:'update',
             icon: <EditOutlined></EditOutlined> ,
             handler(record:any) {
-                
+                console.log('no',record);
                 // navigate(`${route}/${record.id}/edit`)
             },
         },
     ].map((action:any)=>{
-        defaultActions?.map((defaultAction:any)=>{
-            if(action.title == defaultAction){
-                let ovverride = 0;
-                actions.map((overrideAction:any)=>{
-                    if(overrideAction.title == action.title ){
-                        ovverride = 1 ;
-                    }
-                })
-                if(ovverride) return ;
-
-                actions = [...actions , action ] ;
+        let override = 0;
+        actions?.map((overrideAction:any)=>{
+            if(overrideAction.title == action.title ) {
+                override = 1;
             }
         })
+        if(override){
+            return ;
+        }
+        let showDefaultAction = 0 ; 
+        defaultActions?.map((defaultAction:any)=>{
+            if(defaultAction == action.title ){
+                showDefaultAction= 1;
+            }
+        })
+        if(showDefaultAction)
+            actions = [...actions , action] ;
+  
     }) 
 
 

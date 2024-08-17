@@ -49,4 +49,7 @@ export const getTimeString = (now:any, startTime:any) => {
     return result;
 };
 
+export const getBackURL = ()=>{
+  return import.meta.env.VITE_REACT_API_KEY ;
+}
 

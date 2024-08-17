@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 // import { courseDays } from '../../constants/fake'
-import { Button, Card, Col, Popconfirm, Row } from 'antd';
+import { Button, Card, Col, Form, Input, Popconfirm, Row } from 'antd';
 import {  DeleteOutlined, EditOutlined, FolderViewOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useCreateCourseDayMutation, useDeleteCourseDayMutation, useEditCourseDayMutation, useGetCourseDaysQuery } from '../../features/courseDays/courseDaysApiSlice';
-import { showErrors } from '../../functions/helpers';
+import { getBackURL, showErrors } from '../../functions/helpers';
+import CustomModal from '../../components/CustomModal';
+import { apiSlice } from '../../app/api/apiSlice';
+import { useDispatch } from 'react-redux';
 
 
 function CourseDays() {
@@ -17,13 +20,13 @@ function CourseDays() {
   const [deleteCourseDay , {} ] = useDeleteCourseDayMutation();
   const [editCourseDay , {}] = useEditCourseDayMutation();
   const [createCourseDay , {}] = useCreateCourseDayMutation() ;
-
+  const dispatch = useDispatch();
   const courseDays = data?.course_days ;
   console.table(courseDays);
   const navigate = useNavigate() ;
   const location = useLocation();
   let route = '/courses' ;
-  let mutations =['user mutations'] ; 
+  
   const pathname = location.pathname ;
   if(pathname.includes('dashboard')){
     // mutations =  ;
@@ -79,6 +82,103 @@ function CourseDays() {
     }
   },[action , record])
 
+      // modal states 
+      const [openModal, setOpenModal ] = useState(0) ;
+      const [modalAction , setModalAction ] = useState('add') ;
+      const [newModalData, setNewModalData ] =useState({}) ;
+      const [form] = Form.useForm();
+      
+      // end modal states 
+      // (modal + crudTable )mutations 
+      
+      let mutations  = {
+        delete:async (id:any)=>{
+          try{
+            // let res = await deleteExercise({id}).unwrap();
+    
+          }
+          
+          catch(err){
+            showErrors(err);
+          }
+        },
+        update: async (data:any)=>{
+          try{
+            let auth = JSON.parse(localStorage.getItem('auth'));
+            console.log(newModalData);
+            auth = `Bearer ` + auth?.access_token ;
+            let res = await fetch(getBackURL()+'/dashboard/exercises/'+newModalData.id, {
+              method:'PUT',
+              body:data ,
+              headers:{
+                'Authorization':auth 
+              }
+            })
+            dispatch(apiSlice.util.resetApiState());
+          }
+          catch(err){
+            showErrors(err);
+          }
+        },
+        create: async (data:any)=>{
+          let auth = JSON.parse(localStorage.getItem('auth'));
+          auth =`Bearer `+ auth?.access_token ;
+          let res = await fetch(getBackURL()+ '/dashboard/courses/' + courseId + '/course_day', {
+            method:'POST',
+            body:data ,
+            headers:{
+              'Authorization':auth 
+            }
+          })
+          dispatch(apiSlice.util.resetApiState());
+        }
+      }
+      
+      // crudTable mutations integrated with modal
+      // let actions = [
+      //   {
+      //     title:'update',
+      //     icon:<EditOutlined></EditOutlined>,
+      //     handler(record:any){
+      //       setOpenModal(1);
+      //       setModalAction('edit')
+      //       form.setFieldsValue(record)
+      //       setNewModalData(record);
+      //     }
+      //   },
+      // ]
+      // modal Form
+      const modalForm =<>
+            <Form
+              onFinish={(values:any)=>{
+                const data : any = new FormData();
+                for (const name in values) {
+                  if(name == 'file')continue ;
+                  data.append(name, values[name]); // there should be values.avatar which is a File object
+                }
+                data.append('image', values?.file?.file?.originFileObj);
+                if(modalAction == 'edit'){
+                  mutations.update(data);
+                }
+                else{
+                  mutations.create(data);
+                }
+              }}
+              form={form}
+              defaultValue={newModalData}
+            >
+              <Form.Item name="name" label="name"
+                    rules={[{ required: true, message: 'Please Enter the name ' }]}
+                  >
+                    <Input type='text' />
+              </Form.Item>
+
+ 
+            </Form>
+          </>
+      
+    
+
   return (
     <>
     
@@ -88,6 +188,10 @@ function CourseDays() {
         <Col>
           <Button
             style={{backgroundColor:'#5099ff'}}
+            onClick={()=>{
+              setOpenModal(1)
+              setModalAction('add')
+            }}
           >
             Add New Course Day
           </Button>
@@ -115,6 +219,16 @@ function CourseDays() {
           })
         }
       </Row>
+      <CustomModal
+          entity='course day'
+          ModalForm={modalForm}
+          
+          form={form}
+          action={modalAction}
+          open={openModal}
+          setOpen={setOpenModal}
+
+      ></CustomModal>
      
       {/* </Row> */}
       

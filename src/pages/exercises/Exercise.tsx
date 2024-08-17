@@ -1,5 +1,5 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Col, Image, Rate, Row, Tag, message } from 'antd'
+import { Button, Col, Empty, Image, Rate, Row, Tag, message } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { convertToFormData, getTimeString, showErrors } from '../../functions/helpers';
@@ -36,7 +36,10 @@ function Exercises() {
     message.error('No exercises in this course day, please add some and try again') ;
     
     return <>
-      
+      <Row justify={'center'}>
+        <Empty
+        ></Empty>
+      </Row>
     </>
   }
   // console.table(exercises);

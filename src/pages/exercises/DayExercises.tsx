@@ -3,8 +3,11 @@ import CrudTable from '../../components/CrudTable'
 import { dayExercisesColumns } from '../../constants/columns'
 import { AllExercises, DayExercisesDataSource } from '../../constants/fake'
 import { Button, Row, Select } from 'antd'
-import { useGetExercisesByCourseIdAndDayIdQuery, useGetExercisesQuery } from '../../features/exercises/exercisesApiSlice'
+import { useAddDayExerciseMutation, useGetExercisesByCourseIdAndDayIdQuery, useGetExercisesQuery } from '../../features/exercises/exercisesApiSlice'
 import { useParams } from 'react-router-dom'
+import { convertToFormData, getBackURL, showErrors } from '../../functions/helpers'
+import { apiSlice } from '../../app/api/apiSlice'
+import { useDispatch } from 'react-redux'
 
 function DayExercises() {
   
@@ -12,6 +15,8 @@ function DayExercises() {
   const {data , isLoading} = useGetExercisesQuery({});
   const {courseId , dayId } =useParams();
   let {data: day_exercises } = useGetExercisesByCourseIdAndDayIdQuery({courseId , dayId});
+  const [addDayExercise, {} ] = useAddDayExerciseMutation() ;
+  const dispatch = useDispatch();
 
   day_exercises = day_exercises?.day_exercises?.map((exercise:any)=>  {
     let newExercise = {...exercise?.exercise} ;
@@ -25,9 +30,49 @@ function DayExercises() {
       value:exercise.id
     }
   }) ;
-  const addExercise = ()=>{
-    // send request 
+  const addExercise = async ()=>{
+    
+    let data = JSON.stringify({exercise_id: exerciseId}) ;
+    console.log(data);
+    try{
+      let token =  JSON.parse( localStorage.getItem('auth') ).access_token ;
+      let res = await fetch( `${getBackURL()}/website/courses/${courseId}/course_day/${dayId}/day_exercise` ,  {
+        method:'POST',
+        body:data ,
+        headers:{
+          'Authorization':'Bearer ' +  token ,
+          'Content-Type':'application/json'
+        }
+      }
+      );
+      dispatch( apiSlice.util.resetApiState() ) ;
+      console.log(res);
+    }
+    catch(err){
+      showErrors(err) ;
+    }
   } 
+  let mutations = {
+    delete: async (id:any)=>{
+      console.log('in');
+      try{
+        let token =  JSON.parse( localStorage.getItem('auth') ).access_token ;
+        let res = await fetch( `${getBackURL()}/website/courses/${courseId}/course_day/${dayId}/day_exercise/${id}` ,  {
+          method:'DELETE',
+          headers:{
+            'Authorization':'Bearer ' +  token ,
+            'Content-Type':'application/json'
+          }
+        }
+        );
+        dispatch( apiSlice.util.resetApiState() ) ;
+        console.log(res);
+      }
+      catch(err){
+        showErrors(err) ;
+      }
+    }
+  }
 
   return (
     <>
@@ -41,7 +86,10 @@ function DayExercises() {
           >
 
           </Select>
-          <Button onClick={addExercise}
+          <Button onClick={()=>{
+            addExercise() 
+            console.log('done')
+          }}
             style={{backgroundColor:'#5099ff'}}
           >
             Add New Exercise
@@ -54,6 +102,7 @@ function DayExercises() {
           dataSource={day_exercises}
           route={'/'}
           defaultActions={['delete']}
+          mutations={mutations}
         />
       </div>
     

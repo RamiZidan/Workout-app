@@ -10,7 +10,11 @@ export const musclesApiSlice = apiSlice.injectEndpoints({
             query: (data:Course)=>({
                 url:`/dashboard/muscles`,
                 method:'POST',
-                body: data
+                body: data,
+                headers:{
+                    'content-type':'multipart/form-data',
+                    'Accept':'*/*'
+                }
             }),
             // providesTags:['muscles']
         }),
@@ -43,6 +47,12 @@ export const musclesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags:['muscles']
         }),
+        getUserMuscles: builder.query({
+            query: ()=>({
+                url:'/website/user_muscle',
+                method:'GET'
+            })
+        })
 
     })
 })
@@ -53,6 +63,7 @@ export const {
     useDeleteMuscleMutation,
     useEditMuscleMutation,
     useGetMuscleByIdQuery,
-    useGetMusclesQuery
+    useGetMusclesQuery,
+    useGetUserMusclesQuery
 
 } = musclesApiSlice
