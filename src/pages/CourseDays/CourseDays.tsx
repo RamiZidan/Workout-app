@@ -107,7 +107,7 @@ function CourseDays() {
             let auth = JSON.parse(localStorage.getItem('auth'));
             console.log(newModalData);
             auth = `Bearer ` + auth?.access_token ;
-            let res = await fetch(getBackURL()+'/dashboard/exercises/'+newModalData.id, {
+            let res = await fetch(getBackURL()+'/website/exercises/'+newModalData.id, {
               method:'PUT',
               body:data ,
               headers:{
@@ -123,7 +123,7 @@ function CourseDays() {
         create: async (data:any)=>{
           let auth = JSON.parse(localStorage.getItem('auth'));
           auth =`Bearer `+ auth?.access_token ;
-          let res = await fetch(getBackURL()+ '/dashboard/courses/' + courseId + '/course_day', {
+          let res = await fetch(getBackURL()+ '/website/courses/' + courseId + '/course_day', {
             method:'POST',
             body:data ,
             headers:{

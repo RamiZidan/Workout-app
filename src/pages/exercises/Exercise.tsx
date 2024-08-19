@@ -2,9 +2,10 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Image, Rate, Row, Tag, message } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { convertToFormData, getTimeString, showErrors } from '../../functions/helpers';
+import { convertToFormData, getBackURL, getTimeString, showErrors } from '../../functions/helpers';
 import { useCreateFeedbackMutation, useGetExercisesByCourseIdAndDayIdQuery } from '../../features/exercises/exercisesApiSlice';
 import { useDispatch } from 'react-redux';
+import { apiSlice } from '../../app/api/apiSlice';
 
 function Exercises() {
   const navigate = useNavigate();
@@ -57,6 +58,21 @@ function Exercises() {
     });
     return matchIndex;
   }
+  const donePracticeDay = async ()=>{
+    let data = JSON.stringify({day_id : dayId} ) ;
+    // data = convertToFormData(data) ;
+    let token = JSON.parse(localStorage.getItem('auth')).access_token ;
+
+    let res = await fetch(getBackURL() + `/website/day_practices` , {
+      body:data ,
+      method:'POST',
+      headers:{
+        Authorization:'Bearer ' + token ,
+        'Content-Type':'application/json'
+      }
+    })
+  }
+
   const prev = ()=>{
     const prevIndex = getIdIndex((exerciseId))-1;
     if(prevIndex >= 0 )
@@ -73,6 +89,7 @@ function Exercises() {
 
     if(nextIndex== exercises?.length){
       message.success('congrats you finished your exerecises for today');
+      donePracticeDay();
       navigate('/courses');
       return ;
     }
@@ -84,6 +101,7 @@ function Exercises() {
       try{
         let res= await createFeedback(data).unwrap();
         setExerciseStatus(4);
+        apiSlice.util.resetApiState()
       }
       catch(err){
         showErrors(err);
