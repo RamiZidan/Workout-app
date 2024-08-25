@@ -38,7 +38,7 @@ const Login = () => {
         // message.success('user');
       }
     } catch (error: any) {
-      message.error('Wrong Credentials')
+      message.error('use the following credentials: \n Email: user@email.com or admin@email.com \n Password: password')
     }
   }
   return (
